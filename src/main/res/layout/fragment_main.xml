@@ -1,0 +1,190 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivityFragment"
+    tools:showIn="@layout/activity_main">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/math_game"
+            android:textSize="40sp" />
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:onClick="startGame"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/start"
+
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/game_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1dp">
+
+            <TextView
+                android:id="@+id/arg1"
+                style="@style/problem_text" />
+
+            <TextView
+                android:id="@+id/op"
+                style="@style/problem_text" />
+
+            <TextView
+                android:id="@+id/arg2"
+                style="@style/problem_text" />
+
+            <TextView
+                android:id="@+id/equal"
+                style="@style/problem_text" />
+
+            <TextView
+                android:id="@+id/answer"
+                style="@style/problem_text" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/check"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/result_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/right_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/show_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/show_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/keypad_layout">
+
+            <Button
+                android:id="@+id/seven"
+                style="@style/keypad_button"
+                android:text="7"></Button>
+
+            <Button
+                android:id="@+id/eight"
+                style="@style/keypad_button"
+                android:text="8"></Button>
+
+            <Button
+                android:id="@+id/nine"
+                style="@style/keypad_button"
+                android:text="9"></Button>
+        </LinearLayout>
+
+        <LinearLayout style="@style/keypad_layout">
+
+            <Button
+                android:id="@+id/four"
+                style="@style/keypad_button"
+
+                android:text="4"></Button>
+
+            <Button
+                android:id="@+id/five"
+                style="@style/keypad_button"
+
+                android:text="5"></Button>
+
+            <Button
+                android:id="@+id/six"
+                style="@style/keypad_button"
+
+                android:text="6"></Button>
+        </LinearLayout>
+
+        <LinearLayout style="@style/keypad_layout">
+
+            <Button
+                android:id="@+id/one"
+                style="@style/keypad_button"
+
+                android:text="1"></Button>
+
+            <Button
+                android:id="@+id/two"
+                style="@style/keypad_button"
+                android:text="2"></Button>
+
+            <Button
+                android:id="@+id/three"
+                style="@style/keypad_button"
+                android:text="3"></Button>
+        </LinearLayout>
+
+        <LinearLayout style="@style/keypad_layout">
+
+            <Button
+                android:id="@+id/zero"
+                style="@style/keypad_button"
+                android:text="0"></Button>
+
+            <Button
+                android:id="@+id/enter"
+                style="@style/keypad_button"
+                android:text="="></Button>
+
+            <Button
+                android:id="@+id/clear"
+                style="@style/keypad_button"
+                android:text="C"></Button>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
