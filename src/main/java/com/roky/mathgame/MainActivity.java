@@ -2,12 +2,10 @@ package com.roky.mathgame;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
+import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
@@ -20,10 +18,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private int totalPoint = 0;
-    private int rightCount = 0;
-    private int level = 1;
-
+    GameEngine gameEngine;
     Button startButton;
     TextView arg1;
     TextView op;
@@ -33,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Toast toastTrue;
     Toast toastEmpty;
     Button checkButton;
-    Button showResultButton;
     TextView rightText;
     TextView pointText;
     TextView levelText;
@@ -99,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         enter.setOnClickListener(this);
         clear.setOnClickListener(this);
 
+        gameEngine = new GameEngine();
+
         initialize();
     }
 
@@ -128,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(id==R.id.zero){
             answer.setText(answer.getText() + zero.getText().toString());
         }else if(id==R.id.enter || id==R.id.check){
-            checkAnswer();
+            checkResult();
         }else if(id==R.id.clear){
             answer.setText("");
         }
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void startGame(View view)
     {
         startButton.setEnabled(false);
-        showAgrs(level);
+        showProblem();
         checkButton.setVisibility(View.VISIBLE);
         answer.setVisibility(View.VISIBLE);
         one.setVisibility(View.VISIBLE);
@@ -154,23 +150,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clear.setVisibility(View.VISIBLE);
     }
 
-    private void showAgrs(int argLevel)
+    private void showProblem()
     {
-        int randomBase1 = (argLevel - 1) * 5;
-        int randomBase2 = argLevel * 5 - 1;
-        Random r = new Random();
-        int order = r.nextInt(1);;
-        int i1 = r.nextInt(4) + randomBase1 + 1;
-        int i2 = r.nextInt(randomBase2) + 1;
-        if (order == 0){
-            arg1.setText("" + i1);
-            arg2.setText("" + i2);
-        }
-        else {
-            arg1.setText("" + i2);
-            arg2.setText("" + i1);
-        }
-        op.setText("+");
+        String[] args = gameEngine.getArgs();
+        int argLevel = gameEngine.getLevel();
+
+        arg1.setText(args[0]);
+        arg2.setText(args[1]);
+
+        op.setText(args[2]);
         equal.setText("=");
         answer.setText("");
 
@@ -179,62 +167,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         op.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50 - argLevel);
         equal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50 - argLevel);
         answer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50 - argLevel);
+        answer.setFilters(new InputFilter[] {new InputFilter.LengthFilter(Integer.parseInt(args[3]))});
     }
 
-    public void checkAnswer()
-    {
+    private void checkResult(){
         int a1 = Integer.parseInt(arg1.getText().toString());
         int a2 = Integer.parseInt(arg2.getText().toString());
+        String operator = op.getText().toString();
         int ans = 0;
         String ansText = answer.getText().toString().trim();
-
         if (ansText.length() == 0)
         {
             toastEmpty.show();
-            showAgrs(level);
+            showProblem();
             return;
         }
         ans = Integer.parseInt(ansText);
-
-        if (a1 + a2 == ans)
-        {
-            rightCount++;
-            totalPoint += level;
-            toastTrue.show();
-            if (rightCount % 5 == 0)
-            {
-                level++;
-            }
-            rightText.setText(getString(R.string.right_count) + rightCount);
-            pointText.setText(getString(R.string.point_count) + totalPoint);
-            levelText.setText(getString(R.string.level_count) + level);
-            showAgrs(level);
+        if (gameEngine.checkAnswer(a1, a2, ans, operator)){
+            rightText.setText(getString(R.string.right_count) + gameEngine.getRightCount());
+            pointText.setText(getString(R.string.point_count) + gameEngine.getTotalPoint());
+            levelText.setText(getString(R.string.level_count) + gameEngine.getLevel());
+            showProblem();
         }
-        else
-        {
+        else{
             showResult();
         }
-
     }
 
     public void showResult()
     {
+        int gameLevel = gameEngine.getLevel();
         String textResult = "";
         textResult += getString(R.string.right_count);
-        textResult += " " + rightCount + "\n";
+        textResult += " " + gameEngine.getRightCount() + "\n";
         textResult += getString(R.string.point_count);
-        textResult += " " + totalPoint + "\n";
+        textResult += " " + gameEngine.getTotalPoint() + "\n";
         textResult += getString(R.string.level_count);
-        textResult += " " + level + "\n";
-        if (level <= 2)
+        textResult += " " + gameLevel + "\n";
+        if (gameLevel <= 2)
         {
             textResult += "\n" + getString(R.string.ni);
         }
-        else if (level <= 4)
+        else if (gameLevel <= 4)
         {
             textResult += "\n" + getString(R.string.good);
         }
-        else if (level <= 6)
+        else if (gameLevel <= 6)
         {
             textResult += "\n" + getString(R.string.great);
         }
@@ -258,19 +236,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int whichButton)
                     {
                         dialog.cancel();
-                        initialize();
                     }
                 });
 
         AlertDialog dialog = builder.create();    // 알림창 객체 생성
         dialog.show();    // 알림창 띄우기
+        initialize();
     }
 
     public void initialize()
     {
-        totalPoint = 0;
-        rightCount = 0;
-        level = 1;
+        gameEngine.setTotalPoint(0);
+        gameEngine.setRightCount(0);
+        gameEngine.setLevel(1);
 
         startButton.setEnabled(true);
         arg1.setText("");
