@@ -169,6 +169,11 @@
         <LinearLayout style="@style/keypad_layout">
 
             <Button
+                android:id="@+id/clear"
+                style="@style/keypad_button"
+                android:text="C"></Button>
+
+            <Button
                 android:id="@+id/zero"
                 style="@style/keypad_button"
                 android:text="0"></Button>
@@ -178,10 +183,7 @@
                 style="@style/keypad_button"
                 android:text="="></Button>
 
-            <Button
-                android:id="@+id/clear"
-                style="@style/keypad_button"
-                android:text="C"></Button>
+
         </LinearLayout>
 
     </LinearLayout>
